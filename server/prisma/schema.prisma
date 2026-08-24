@@ -7,10 +7,395 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ============================================================================
+// ENUMS
+// ============================================================================
+
+enum ProtocolStatus {
+  DRAFT
+  IN_REVIEW
+  APPROVED
+  ACTIVE
+  COMPLETED
+  TERMINATED
+  SUSPENDED
+  WITHDRAWN
+}
+
+enum StudyPhase {
+  EARLY_PHASE_1
+  PHASE_1
+  PHASE_1_2
+  PHASE_2
+  PHASE_2_3
+  PHASE_3
+  PHASE_3B
+  PHASE_4
+  NOT_APPLICABLE
+}
+
+enum StudyType {
+  INTERVENTIONAL
+  OBSERVATIONAL
+  EXPANDED_ACCESS
+}
+
+enum BlindingType {
+  OPEN_LABEL
+  SINGLE_BLIND
+  DOUBLE_BLIND
+  TRIPLE_BLIND
+  QUADRUPLE_BLIND
+}
+
+enum ControlType {
+  PLACEBO
+  ACTIVE
+  DOSE_COMPARISON
+  NO_INTERVENTION
+  HISTORICAL
+  UNCONTROLLED
+}
+
+enum RandomizationType {
+  SIMPLE
+  BLOCK
+  STRATIFIED
+  ADAPTIVE
+  NONE
+}
+
+enum ArmType {
+  EXPERIMENTAL
+  ACTIVE_COMPARATOR
+  PLACEBO_COMPARATOR
+  SHAM_COMPARATOR
+  NO_INTERVENTION
+}
+
+enum InterventionType {
+  DRUG
+  BIOLOGICAL
+  DEVICE
+  PROCEDURE
+  BEHAVIORAL
+  DIETARY_SUPPLEMENT
+  RADIATION
+  GENETIC
+  COMBINATION
+  OTHER
+}
+
+enum CriterionType {
+  INCLUSION
+  EXCLUSION
+}
+
+enum EndpointType {
+  PRIMARY
+  SECONDARY
+  EXPLORATORY
+  SAFETY
+}
+
+enum ObjectiveType {
+  PRIMARY
+  SECONDARY
+  EXPLORATORY
+}
+
+enum AmendmentStatus {
+  DRAFT
+  IN_REVIEW
+  APPROVED
+  REJECTED
+}
+
+enum TeamRole {
+  PRINCIPAL_INVESTIGATOR
+  SUB_INVESTIGATOR
+  STATISTICIAN
+  MEDICAL_MONITOR
+  DATA_MANAGER
+  CLINICAL_RESEARCH_COORDINATOR
+  REGULATORY_AFFAIRS
+  MEDICAL_WRITER
+  SPONSOR_REPRESENTATIVE
+  PHARMACOVIGILANCE
+}
+
+enum AuditAction {
+  CREATE
+  UPDATE
+  DELETE
+  STATUS_CHANGE
+  VERSION_CHANGE
+}
+
+enum AdverseEventSeverity {
+  MILD
+  MODERATE
+  SEVERE
+  LIFE_THREATENING
+  FATAL
+}
+
+enum AnalysisPopulation {
+  ITT
+  MITT
+  PP
+  SAFETY
+}
+
+// ============================================================================
+// MODELS
+// ============================================================================
+
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String   @id @default(uuid())
+  email        String   @unique
+  firstName    String
+  lastName     String
+  organization String?
+  title        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  protocolTeams    ProtocolTeamMember[]
+  auditLogs        AuditLog[]
+  createdProtocols Protocol[]           @relation("ProtocolCreator")
+}
+
+model Protocol {
+  id             String         @id @default(uuid())
+  protocolNumber String         @unique
+  shortTitle     String
+  fullTitle      String
+  version        String         @default("0.1")
+  status         ProtocolStatus @default(DRAFT)
+  createdById    String
+  sponsorName    String?
+  sponsorContact Json?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  createdBy           User                   @relation("ProtocolCreator", fields: [createdById], references: [id])
+  teamMembers         ProtocolTeamMember[]
+  trialDesign         TrialDesign?
+  objectives          Objective[]
+  arms                StudyArm[]
+  eligibilityCriteria EligibilityCriterion[]
+  interventions       Intervention[]
+  endpoints           Endpoint[]
+  statisticalPlan     StatisticalPlan?
+  sections            ProtocolSection[]
+  amendments          Amendment[]
+  auditLogs           AuditLog[]
+
+  @@index([status])
+  @@index([createdById])
+}
+
+model ProtocolTeamMember {
+  id         String   @id @default(uuid())
+  protocolId String
+  userId     String
+  role       TeamRole
+  isPrimary  Boolean  @default(false)
+  addedAt    DateTime @default(now())
+
+  protocol Protocol @relation(fields: [protocolId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id])
+
+  @@unique([protocolId, userId, role])
+  @@index([userId])
+}
+
+model TrialDesign {
+  id                     String            @id @default(uuid())
+  protocolId             String            @unique
+  studyType              StudyType         @default(INTERVENTIONAL)
+  phase                  StudyPhase        @default(NOT_APPLICABLE)
+  blindingType           BlindingType      @default(OPEN_LABEL)
+  controlType            ControlType?
+  randomizationType      RandomizationType @default(NONE)
+  allocationRatio        String?
+  numberOfArms           Int               @default(1)
+  estimatedEnrollment    Int?
+  studyDurationMonths    Int?
+  treatmentDurationWeeks Int?
+  followUpDurationWeeks  Int?
+  adaptiveDesign         Boolean           @default(false)
+  adaptiveDesignDetails  String?
+  multicenter            Boolean           @default(false)
+  numberOfSites          Int?
+  countries              String[]
+
+  protocol Protocol @relation(fields: [protocolId], references: [id], onDelete: Cascade)
+}
+
+model Objective {
+  id          String        @id @default(uuid())
+  protocolId  String
+  type        ObjectiveType
+  sortOrder   Int           @default(0)
+  description String
+
+  protocol  Protocol   @relation(fields: [protocolId], references: [id], onDelete: Cascade)
+  endpoints Endpoint[]
+
+  @@index([protocolId, type])
+}
+
+model StudyArm {
+  id               String  @id @default(uuid())
+  protocolId       String
+  name             String
+  type             ArmType
+  description      String?
+  sortOrder        Int     @default(0)
+  participantCount Int?
+
+  protocol      Protocol          @relation(fields: [protocolId], references: [id], onDelete: Cascade)
+  interventions ArmIntervention[]
+
+  @@index([protocolId])
+}
+
+model Intervention {
+  id                   String           @id @default(uuid())
+  protocolId           String
+  name                 String
+  type                 InterventionType
+  description          String?
+  dose                 String?
+  frequency            String?
+  route                String?
+  duration             String?
+  manufacturer         String?
+  complianceMonitoring String?
+
+  protocol Protocol          @relation(fields: [protocolId], references: [id], onDelete: Cascade)
+  arms     ArmIntervention[]
+
+  @@index([protocolId])
+}
+
+model ArmIntervention {
+  id             String @id @default(uuid())
+  armId          String
+  interventionId String
+
+  arm          StudyArm     @relation(fields: [armId], references: [id], onDelete: Cascade)
+  intervention Intervention @relation(fields: [interventionId], references: [id], onDelete: Cascade)
+
+  @@unique([armId, interventionId])
+}
+
+model EligibilityCriterion {
+  id          String        @id @default(uuid())
+  protocolId  String
+  type        CriterionType
+  sortOrder   Int           @default(0)
+  description String
+  category    String?
+
+  protocol Protocol @relation(fields: [protocolId], references: [id], onDelete: Cascade)
+
+  @@index([protocolId, type])
+}
+
+model Endpoint {
+  id                String       @id @default(uuid())
+  protocolId        String
+  objectiveId       String?
+  type              EndpointType
+  sortOrder         Int          @default(0)
+  description       String
+  measurementMethod String?
+  timeframe         String?
+  statisticalTest   String?
+
+  protocol  Protocol   @relation(fields: [protocolId], references: [id], onDelete: Cascade)
+  objective Objective? @relation(fields: [objectiveId], references: [id], onDelete: SetNull)
+
+  @@index([protocolId, type])
+}
+
+model StatisticalPlan {
+  id                       String               @id @default(uuid())
+  protocolId               String               @unique
+  sampleSizeTotal          Int?
+  sampleSizeJustification  String?
+  powerCalculation         Json?
+  significanceLevel        Float?               @default(0.05)
+  primaryAnalysisMethod    String?
+  secondaryAnalysisMethods String?
+  interimAnalyses          Json?
+  missingDataHandling      String?
+  multiplicity             String?
+  analysisPopulations      AnalysisPopulation[]
+  subgroupAnalyses         String?
+  sensitivityAnalyses      String?
+
+  protocol Protocol @relation(fields: [protocolId], references: [id], onDelete: Cascade)
+}
+
+model ProtocolSection {
+  id          String   @id @default(uuid())
+  protocolId  String
+  sectionCode String
+  title       String
+  content     Json?
+  sortOrder   Int      @default(0)
+  isComplete  Boolean  @default(false)
+  updatedAt   DateTime @updatedAt
+
+  protocol Protocol @relation(fields: [protocolId], references: [id], onDelete: Cascade)
+
+  @@unique([protocolId, sectionCode])
+  @@index([protocolId])
+}
+
+model Amendment {
+  id              String          @id @default(uuid())
+  protocolId      String
+  amendmentNumber Int
+  previousVersion String
+  newVersion      String
+  status          AmendmentStatus @default(DRAFT)
+  summary         String
+  rationale       String
+  changes         Json
+  submittedAt     DateTime?
+  approvedAt      DateTime?
+  approvedBy      String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  protocol Protocol @relation(fields: [protocolId], references: [id], onDelete: Cascade)
+
+  @@unique([protocolId, amendmentNumber])
+  @@index([protocolId])
+}
+
+model AuditLog {
+  id         String      @id @default(uuid())
+  protocolId String
+  userId     String
+  action     AuditAction
+  entityType String
+  entityId   String
+  field      String?
+  oldValue   String?
+  newValue   String?
+  metadata   Json?
+  createdAt  DateTime    @default(now())
+
+  protocol Protocol @relation(fields: [protocolId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id])
+
+  @@index([protocolId, createdAt])
+  @@index([protocolId, entityType, entityId])
+  @@index([userId])
 }
