@@ -1,0 +1,39 @@
+.tab-view {
+  &__nav {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid #e5e7eb;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  &__tab {
+    padding: 10px 20px;
+    border: none;
+    border-bottom: 2px solid transparent;
+    background: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #6b7280;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color 0.15s, border-color 0.15s;
+
+    &:hover {
+      color: #111827;
+    }
+
+    &--active {
+      color: #2563eb;
+      border-bottom-color: #2563eb;
+    }
+  }
+
+  &__content {
+    padding: 24px 0;
+  }
+}
