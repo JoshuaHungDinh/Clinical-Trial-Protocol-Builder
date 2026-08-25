@@ -1,0 +1,136 @@
+.arms-tab {
+  display: grid;
+  gap: 16px;
+
+  &__empty {
+    color: #6b7280;
+  }
+
+  &__card {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 20px;
+  }
+
+  &__card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  &__arm-name {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #111827;
+  }
+
+  &__arm-type {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+
+    &--experimental {
+      background: #ede9fe;
+      color: #5b21b6;
+    }
+
+    &--active_comparator {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    &--placebo_comparator {
+      background: #e5e7eb;
+      color: #4b5563;
+    }
+
+    &--sham_comparator {
+      background: #e5e7eb;
+      color: #4b5563;
+    }
+
+    &--no_intervention {
+      background: #f3f4f6;
+      color: #6b7280;
+    }
+  }
+
+  &__description {
+    margin: 0 0 8px;
+    font-size: 0.875rem;
+    color: #374151;
+    line-height: 1.5;
+  }
+
+  &__participants {
+    margin: 0 0 12px;
+    font-size: 0.8125rem;
+    color: #6b7280;
+  }
+
+  &__interventions {
+    border-top: 1px solid #f3f4f6;
+    padding-top: 12px;
+  }
+
+  &__interventions-title {
+    margin: 0 0 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #6b7280;
+  }
+
+  &__intervention {
+    background: #f9fafb;
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 8px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__intervention-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  &__intervention-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #111827;
+  }
+
+  &__intervention-type {
+    font-size: 0.6875rem;
+    color: #6b7280;
+  }
+
+  &__intervention-details {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 4px 12px;
+    margin: 0;
+    font-size: 0.8125rem;
+
+    dt {
+      color: #6b7280;
+      font-weight: 500;
+    }
+
+    dd {
+      color: #374151;
+      margin: 0;
+    }
+  }
+}
