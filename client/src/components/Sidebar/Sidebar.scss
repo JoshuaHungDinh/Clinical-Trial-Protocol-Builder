@@ -1,0 +1,101 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  background: #1e293b;
+  color: #94a3b8;
+  width: 240px;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  transition: width 0.2s ease;
+  overflow: hidden;
+
+  &--collapsed {
+    width: 64px;
+  }
+
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 18px;
+    border-bottom: 1px solid #334155;
+    min-height: 68px;
+  }
+
+  &__logo {
+    flex-shrink: 0;
+  }
+
+  &__brand-text {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #f1f5f9;
+    white-space: nowrap;
+  }
+
+  &__nav {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 12px 8px;
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: background 0.15s ease, color 0.15s ease;
+
+    &:hover {
+      background: #334155;
+      color: #e2e8f0;
+    }
+
+    &--active {
+      background: #334155;
+      color: #f1f5f9;
+    }
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+  }
+
+  &__label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 8px;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: #64748b;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+
+    &:hover {
+      background: #334155;
+      color: #e2e8f0;
+    }
+  }
+}
