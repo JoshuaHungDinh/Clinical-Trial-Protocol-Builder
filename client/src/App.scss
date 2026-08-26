@@ -20,26 +20,3 @@ body {
   background: #fff;
   line-height: 1.5;
 }
-
-// App layout
-.app {
-  min-height: 100vh;
-
-  &__header {
-    border-bottom: 1px solid #e5e7eb;
-    padding: 16px 32px;
-    background: #fff;
-  }
-
-  &__title {
-    font-size: 1.125rem;
-    font-weight: 700;
-    color: #111827;
-  }
-
-  &__main {
-    max-width: 1120px;
-    margin: 0 auto;
-    padding: 32px;
-  }
-}
