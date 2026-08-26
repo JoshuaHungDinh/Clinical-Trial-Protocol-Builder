@@ -1,14 +1,15 @@
 .sidebar {
   display: flex;
   flex-direction: column;
-  background: #1e293b;
-  color: #94a3b8;
+  background: #fff;
+  color: #6b7280;
   width: 240px;
   height: 100vh;
   position: sticky;
   top: 0;
   transition: width 0.2s ease;
   overflow: hidden;
+  border-right: 1px solid #e5e7eb;
 
   &--collapsed {
     width: 64px;
@@ -19,7 +20,7 @@
     align-items: center;
     gap: 12px;
     padding: 20px 18px;
-    border-bottom: 1px solid #334155;
+    border-bottom: 1px solid #e5e7eb;
     min-height: 68px;
   }
 
@@ -30,7 +31,7 @@
   &__brand-text {
     font-size: 1rem;
     font-weight: 700;
-    color: #f1f5f9;
+    color: #111827;
     white-space: nowrap;
   }
 
@@ -48,7 +49,7 @@
     gap: 12px;
     padding: 10px 12px;
     border-radius: 6px;
-    color: #94a3b8;
+    color: #6b7280;
     text-decoration: none;
     font-size: 0.875rem;
     font-weight: 500;
@@ -56,13 +57,13 @@
     transition: background 0.15s ease, color 0.15s ease;
 
     &:hover {
-      background: #334155;
-      color: #e2e8f0;
+      background: #f3f4f6;
+      color: #111827;
     }
 
     &--active {
-      background: #334155;
-      color: #f1f5f9;
+      background: #eff6ff;
+      color: #2563eb;
     }
   }
 
@@ -89,13 +90,13 @@
     border: none;
     border-radius: 6px;
     background: transparent;
-    color: #64748b;
+    color: #9ca3af;
     cursor: pointer;
     transition: background 0.15s ease, color 0.15s ease;
 
     &:hover {
-      background: #334155;
-      color: #e2e8f0;
+      background: #f3f4f6;
+      color: #111827;
     }
   }
 }
