@@ -1,0 +1,27 @@
+.app-shell {
+  --sidebar-width: 240px;
+
+  display: grid;
+  grid-template-columns: var(--sidebar-width) 1fr;
+  min-height: 100vh;
+  transition: grid-template-columns 0.2s ease;
+
+  &--collapsed {
+    --sidebar-width: 64px;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: #f8fafc;
+  }
+
+  &__main {
+    flex: 1;
+    max-width: 1120px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 32px;
+  }
+}

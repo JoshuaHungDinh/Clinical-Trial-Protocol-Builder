@@ -1,0 +1,21 @@
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 32px;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+  min-height: 64px;
+
+  &__title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #111827;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}

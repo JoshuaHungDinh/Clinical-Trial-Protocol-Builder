@@ -1,0 +1,75 @@
+.endpoints-tab {
+  &__empty {
+    color: #6b7280;
+  }
+
+  &__group {
+    margin-bottom: 28px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__group-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 12px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: #111827;
+  }
+
+  &__count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    border-radius: 11px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: #f3f4f6;
+    color: #6b7280;
+  }
+
+  &__list {
+    display: grid;
+    gap: 12px;
+  }
+
+  &__item {
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 14px 16px;
+  }
+
+  &__description {
+    margin: 0 0 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #111827;
+    line-height: 1.5;
+  }
+
+  &__details {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 4px 12px;
+    margin: 0;
+    font-size: 0.8125rem;
+
+    dt {
+      color: #6b7280;
+      font-weight: 500;
+    }
+
+    dd {
+      color: #374151;
+      margin: 0;
+      line-height: 1.5;
+    }
+  }
+}

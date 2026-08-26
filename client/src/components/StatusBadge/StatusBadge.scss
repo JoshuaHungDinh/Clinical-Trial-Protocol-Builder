@@ -1,0 +1,50 @@
+.status-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+
+  &--draft {
+    background-color: #e5e7eb;
+    color: #4b5563;
+  }
+
+  &--in_review {
+    background-color: #fef3c7;
+    color: #92400e;
+  }
+
+  &--approved {
+    background-color: #dbeafe;
+    color: #1e40af;
+  }
+
+  &--active {
+    background-color: #d1fae5;
+    color: #065f46;
+  }
+
+  &--completed {
+    background-color: #ccfbf1;
+    color: #115e59;
+  }
+
+  &--terminated {
+    background-color: #fee2e2;
+    color: #991b1b;
+  }
+
+  &--suspended {
+    background-color: #ffedd5;
+    color: #9a3412;
+  }
+
+  &--withdrawn {
+    background-color: #d1d5db;
+    color: #374151;
+  }
+}
